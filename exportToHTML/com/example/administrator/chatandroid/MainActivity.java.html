@@ -1,0 +1,126 @@
+<html>
+<head>
+<title>MainActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,128,0); font-weight: bold; }
+.s3 { color: rgb(0,0,255); }
+.s4 { color: rgb(128,128,128); font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+MainActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.administrator.chatandroid; 
+ 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.widget.BaseAdapter; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.EditText; 
+</span><span class="s0">import </span><span class="s1">android.widget.ListView; 
+ 
+</span><span class="s0">import </span><span class="s1">org.json.JSONException; 
+</span><span class="s0">import </span><span class="s1">org.json.JSONObject; 
+ 
+</span><span class="s0">import </span><span class="s1">java.text.SimpleDateFormat; 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+</span><span class="s0">import </span><span class="s1">java.util.Date; 
+</span><span class="s0">import </span><span class="s1">java.util.List; 
+ 
+</span><span class="s0">public class </span><span class="s1">MainActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity </span><span class="s0">implements </span><span class="s1">HttpDataListener,View.OnClickListener{ 
+    </span><span class="s0">private </span><span class="s1">HttpData httpData; 
+    </span><span class="s0">private </span><span class="s1">List&lt;ListData&gt; list; 
+ 
+    </span><span class="s0">private </span><span class="s1">ListView listView; 
+    </span><span class="s0">private </span><span class="s1">EditText editText; 
+    </span><span class="s0">private </span><span class="s1">Button button; 
+ 
+    </span><span class="s0">private </span><span class="s1">String content; 
+    </span><span class="s0">private </span><span class="s1">TextAdapter adapter; 
+ 
+    </span><span class="s0">private </span><span class="s1">String []welcome_array; 
+    </span><span class="s0">private </span><span class="s1">String url = </span><span class="s2">&quot;http://www.tuling123.com/openapi/api?key=1c21b0606d78455c8760136c8dadfd70&amp;info=&quot;</span><span class="s1">; 
+ 
+    </span><span class="s0">private double </span><span class="s1">currentTime,oldTime=</span><span class="s3">0</span><span class="s1">; 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.activity_main); 
+        init(); 
+ 
+ 
+    } 
+    </span><span class="s0">private  void </span><span class="s1">init(){ 
+        list = </span><span class="s0">new </span><span class="s1">ArrayList&lt;ListData&gt;(); 
+        listView = (ListView)findViewById(R.id.listview); 
+        button = (Button)findViewById(R.id.btn); 
+        button.setOnClickListener(</span><span class="s0">this</span><span class="s1">); 
+        editText=(EditText)findViewById(R.id.editText); 
+        adapter = </span><span class="s0">new </span><span class="s1">TextAdapter(list,</span><span class="s0">this</span><span class="s1">); 
+        listView.setAdapter(adapter); 
+        ListData listData = </span><span class="s0">new </span><span class="s1">ListData(RandWelcomeTips(),ListData.RECEIVE,getTime()); 
+        list.add(listData); 
+ 
+ 
+    } 
+    </span><span class="s0">private </span><span class="s1">String RandWelcomeTips(){ 
+        String welcome_tip = </span><span class="s0">null</span><span class="s1">; 
+         welcome_array = </span><span class="s0">this</span><span class="s1">.getResources().getStringArray(R.array.welcome); 
+        </span><span class="s0">int </span><span class="s1">index = (</span><span class="s0">int</span><span class="s1">)(Math.random()*(welcome_array.length-</span><span class="s3">1</span><span class="s1">)); 
+        welcome_tip=welcome_array[index]; 
+        </span><span class="s0">return </span><span class="s1">welcome_tip; 
+    } 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">getData(String data) { 
+        System.out.println(data); 
+        paseText(data); 
+    } 
+    </span><span class="s0">public void </span><span class="s1">paseText(String data){ 
+        </span><span class="s0">try </span><span class="s1">{ 
+            JSONObject jsonObject = </span><span class="s0">new </span><span class="s1">JSONObject(data); 
+   </span><span class="s4">/*         System.out.println(jsonObject.getString(&quot;code&quot;)); 
+            System.out.println(jsonObject.getString(&quot;text&quot;));*/</span><span class="s1"> 
+            ListData listData = </span><span class="s0">new </span><span class="s1">ListData(jsonObject.getString(</span><span class="s2">&quot;text&quot;</span><span class="s1">),ListData.RECEIVE,getTime()); 
+            list.add(listData); 
+            adapter.notifyDataSetChanged(); 
+        } </span><span class="s0">catch </span><span class="s1">(JSONException e) { 
+            e.printStackTrace(); 
+        } 
+ 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+ 
+        content= editText.getText().toString(); 
+        String text = content.replace(</span><span class="s2">&quot; &quot;</span><span class="s1">,</span><span class="s2">&quot;&quot;</span><span class="s1">); 
+        String text1 = text.replace(</span><span class="s2">&quot;</span><span class="s0">\n</span><span class="s2">&quot;</span><span class="s1">,</span><span class="s2">&quot;&quot;</span><span class="s1">); 
+        ListData listDdata = </span><span class="s0">new </span><span class="s1">ListData(content,ListData.SEND,getTime()); 
+        list.add(listDdata); 
+        adapter.notifyDataSetChanged(); 
+        httpData =(HttpData) </span><span class="s0">new </span><span class="s1">HttpData(url+text1,</span><span class="s0">this</span><span class="s1">).execute(); 
+    } 
+    </span><span class="s0">public </span><span class="s1">String  getTime(){ 
+        currentTime = System.currentTimeMillis(); 
+        SimpleDateFormat format = </span><span class="s0">new </span><span class="s1">SimpleDateFormat(</span><span class="s2">&quot;yyyy年MM月dd日 HH:mm:ss&quot;</span><span class="s1">); 
+        Date date = </span><span class="s0">new </span><span class="s1">Date(); 
+        String str = format.format(date); 
+        </span><span class="s0">if</span><span class="s1">(currentTime-oldTime&gt;=</span><span class="s3">1000</span><span class="s1">*</span><span class="s3">15</span><span class="s1">){ 
+            oldTime = currentTime; 
+            </span><span class="s0">return </span><span class="s1">str; 
+        } 
+        </span><span class="s0">return </span><span class="s2">&quot;&quot;</span><span class="s1">; 
+    } 
+} 
+</span></pre>
+</body>
+</html>

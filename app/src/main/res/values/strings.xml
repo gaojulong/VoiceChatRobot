@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ChatAndroid</string>
+    <string-array name="welcome">
+        <item>主人你好</item>
+        <item>你好需要什么服务</item>
+        <item>好久不见，聊聊吧</item>
+    </string-array>
+</resources>

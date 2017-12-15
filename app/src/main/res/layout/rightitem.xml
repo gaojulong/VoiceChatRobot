@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="fill_parent"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:layout_below="@+id/time"
+        android:layout_alignParentRight="true"
+        android:id="@+id/right_img"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:padding="10dp"
+        android:src="@drawable/right"/>
+    <TextView
+        android:layout_below="@+id/time"
+        android:layout_toLeftOf="@+id/right_img"
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/right_talk"
+        android:gravity="center"
+        android:text="fsfafsa"
+        android:textSize="14dp"/>
+</RelativeLayout>
